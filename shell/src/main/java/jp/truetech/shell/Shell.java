@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 public class Shell {
@@ -97,17 +98,14 @@ public class Shell {
         if (!line.contains("$")) {
             return line;
         }
-        StringBuilder sb = new StringBuilder(line);
-        variableMap.forEach((name, value) -> {
-            String s = sb.toString();
-            if (s.contains("$" + name)) {
-                String regex = "\\$" + name;
-                s = s.replaceAll(regex, value);
-                sb.setLength(0);
-                sb.append(s);
+
+        for (Entry<String, String> entry : variableMap.entrySet()) {
+            if (line.contains("$" + entry.getKey())) {
+                line = line.replaceAll("\\$" + entry.getKey(), entry.getValue());
             }
-        });
-        return sb.toString();
+        }
+
+        return line;
     }
 
     void exec(String line) throws Exception {

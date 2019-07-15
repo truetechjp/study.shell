@@ -82,5 +82,11 @@ public class ShellTest {
         String line = "$AAA";
         line = shell.expandVariables(line);
         assertThat(line, is("value AAA"));
+
+        shell.setVariable("XXX", "value XXX");
+        line = "AAA=[$AAA], XXX=[$XXX], ZZZ=[$ZZZ]";
+        line = shell.expandVariables(line);
+        assertThat(line, is("AAA=[value AAA], XXX=[value XXX], ZZZ=[$ZZZ]"));
+
     }
 }
